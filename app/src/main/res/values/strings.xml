@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">InClass04</string>
+    <string name="home_Welcome">Welcome to the password app!</string>
+    <string name="text_view_pwd_count">Select Password Count: </string>
+    <string name="text_view_pwd_length">Select Password Length: </string>
+    <string name="text_view_pwd">Password: </string>
+    <string name="action_genereate_pwd_thread">Generate Password (Thread)</string>
+    <string name="action_generate_pwd_async">Generate Password (Async Task)</string>
+    <string name="progress_dialog_message">Generating Password..</string>
+    <string name="three_second_notify">Please wait three seconds...</string>
 </resources>
