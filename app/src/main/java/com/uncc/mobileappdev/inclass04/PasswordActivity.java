@@ -32,8 +32,8 @@ public class PasswordActivity extends AppCompatActivity {
     String selectedPassword;
     TextView passwordVal;
 
-    int[] passwordLength = {8};
-    int[] passwordCount = {1};
+    int passwordLength = 8;
+    int passwordCount = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class PasswordActivity extends AppCompatActivity {
 
                 switch(msg.what){
                     case DoWork.STATUS_START:
-                        progressDialog.setMax(passwordCount[0]);
+                        progressDialog.setMax(passwordCount);
                         progressDialog.setProgress(0);
                         progressDialog.show();
                         Log.d("demo","Starting");
@@ -94,7 +94,7 @@ public class PasswordActivity extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                passwordLength[0] = progress;
+                passwordLength = progress;
                 lengthText.setText(String.valueOf(progress));
             }
 
@@ -111,7 +111,7 @@ public class PasswordActivity extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                passwordCount[0] = progress;
+                passwordCount = progress;
                 countText.setText(String.valueOf(progress));
             }
 
@@ -134,7 +134,7 @@ public class PasswordActivity extends AppCompatActivity {
         asyncButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DoWorkAsync().execute(passwordCount[0]);
+                new DoWorkAsync().execute(passwordCount);
             }
         });
     }
@@ -186,8 +186,8 @@ public class PasswordActivity extends AppCompatActivity {
 
             ArrayList<String> passwords = new ArrayList<>();
 
-            for(int i =0 ; i < passwordCount[0]; i++){
-                passwords.add(getPassword(passwordLength[0]));
+            for(int i =0 ; i < passwordCount; i++){
+                passwords.add(getPassword(passwordLength));
                 //Log.d("Passwords", passwords.get(i));
 
                 Message progMsg = new Message();
@@ -216,15 +216,15 @@ public class PasswordActivity extends AppCompatActivity {
         protected void onPreExecute() {
             progressDialog = new ProgressDialog(PasswordActivity.this);
             progressDialog.setMessage("Generating passwords");
-            progressDialog.setMax(passwordCount[0]);
+            progressDialog.setMax(passwordCount);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setCancelable(true);
             progressDialog.show();
         }
 
-        //Double received from doInBackground
         @Override
         protected void onPostExecute(Double aDouble) {
+            progressDialog.setProgress(passwords.size());
             if(passwords.size() != 0) {
                 showPopup(passwords);
             }
@@ -237,13 +237,10 @@ public class PasswordActivity extends AppCompatActivity {
             progressDialog.incrementProgressBy(1);
         }
 
-        /* Three methods above execute in the Main Thread */
-
-        //Works in child thread of the Main (UI) thread
         @Override
         protected Double doInBackground(Integer... params) {
             for(int i =0 ; i < params[0]; i++) {
-                passwords.add(getPassword(passwordLength[0]));
+                passwords.add(getPassword(passwordLength));
                 publishProgress(i);
             }
 
