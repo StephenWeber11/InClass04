@@ -70,7 +70,7 @@ public class PasswordActivity extends AppCompatActivity {
                         progressDialog = new ProgressDialog(PasswordActivity.this);
                         progressDialog.setMessage("Generating passwords");
                         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        progressDialog.setCancelable(true);
+                        progressDialog.setCancelable(false);
                         progressDialog.setMax(passwordCount);
                         progressDialog.setProgress(1);
                         progressDialog.show();
@@ -235,7 +235,7 @@ public class PasswordActivity extends AppCompatActivity {
             progressDialog.setMessage("Generating passwords");
             progressDialog.setMax(passwordCount);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setCancelable(true);
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
 
