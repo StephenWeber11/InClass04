@@ -1,3 +1,10 @@
+/*
+    Assignment 4
+    PasswordActivity.java
+    Stephen Weber
+    Chinmayi Kulkarni
+ */
+
 package com.uncc.mobileappdev.inclass04;
 
 import android.app.AlertDialog;
@@ -35,16 +42,14 @@ public class PasswordActivity extends AppCompatActivity {
     int passwordLength = 8;
     int passwordCount = 1;
 
+    final static int LENGTH_MIN_VALUE = 8;
+    final static int COUNT_MIN_VALUE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
         setTitle("Password Generator");
-
-        progressDialog = new ProgressDialog(PasswordActivity.this);
-        progressDialog.setMessage("Generating passwords");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(true);
 
         threadPool = Executors.newFixedThreadPool(2);
 
@@ -62,8 +67,12 @@ public class PasswordActivity extends AppCompatActivity {
 
                 switch(msg.what){
                     case DoWork.STATUS_START:
+                        progressDialog = new ProgressDialog(PasswordActivity.this);
+                        progressDialog.setMessage("Generating passwords");
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        progressDialog.setCancelable(true);
                         progressDialog.setMax(passwordCount);
-                        progressDialog.setProgress(0);
+                        progressDialog.setProgress(1);
                         progressDialog.show();
                         Log.d("demo","Starting");
                         break;
@@ -72,6 +81,7 @@ public class PasswordActivity extends AppCompatActivity {
                         Log.d("demo","In Progress " + msg.getData().getInt(DoWork.PROGRESS_KEY));
                         break;
                     case DoWork.STATUS_STOP:
+                        progressDialog.setProgress(progressDialog.getMax());
                         if(msg.getData().getStringArrayList(DoWork.PASSWORD_LIST) != null) {
                             showPopup(msg.getData().getStringArrayList(DoWork.PASSWORD_LIST));
                         }
@@ -96,6 +106,10 @@ public class PasswordActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 passwordLength = progress;
                 lengthText.setText(String.valueOf(progress));
+
+                if (seekBar.getProgress() < LENGTH_MIN_VALUE) {
+                    seekBar.setProgress(LENGTH_MIN_VALUE);
+                }
             }
 
             @Override
@@ -113,6 +127,10 @@ public class PasswordActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 passwordCount = progress;
                 countText.setText(String.valueOf(progress));
+
+                if (seekBar.getProgress() < COUNT_MIN_VALUE) {
+                    seekBar.setProgress(COUNT_MIN_VALUE);
+                }
             }
 
             @Override
@@ -186,9 +204,8 @@ public class PasswordActivity extends AppCompatActivity {
 
             ArrayList<String> passwords = new ArrayList<>();
 
-            for(int i =0 ; i < passwordCount; i++){
+            for(int i=0 ; i < passwordCount; i++){
                 passwords.add(getPassword(passwordLength));
-                //Log.d("Passwords", passwords.get(i));
 
                 Message progMsg = new Message();
                 progMsg.what = STATUS_IN_PROGRESS;

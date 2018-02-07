@@ -1,3 +1,10 @@
+/*
+    Assignment 4
+    MainActivity.java
+    Stephen Weber
+    Chinmayi Kulkarni
+ */
+
 package com.uncc.mobileappdev.inclass04;
 
 import android.app.ProgressDialog;
